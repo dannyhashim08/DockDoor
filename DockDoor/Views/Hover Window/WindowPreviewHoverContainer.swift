@@ -540,7 +540,7 @@ struct WindowPreviewHoverContainer: View {
         if shouldDisplay {
             Button {
                 if let appDelegate = NSApp.delegate as? AppDelegate {
-                    appDelegate.updater.checkForUpdates()
+                    appDelegate.updaterState.checkForUpdates()
                 }
             } label: {
                 Label("Update available", systemImage: "arrow.down.circle.fill")

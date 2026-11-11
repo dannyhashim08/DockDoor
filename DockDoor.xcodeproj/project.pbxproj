@@ -84,7 +84,9 @@
 		F12E9F4AF0474149A4DCE504 /* TrafficLightButtonsSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41BF5F5A97DE457581E09235 /* TrafficLightButtonsSettingsView.swift */; };
 		A4C2F91474874A3A9CE0FBA825CC44EC /* FolderWidgetModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91CF9A1A6F9A48AABC07761494454213 /* FolderWidgetModel.swift */; };
 		AA11001122334455AA110022 /* DockLocker.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA11001122334455AA110011 /* DockLocker.swift */; };
+		BD31001122334455BD310022 /* RunningDockController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD31001122334455BD310011 /* RunningDockController.swift */; };
 		AA11001122334455AA110066 /* DockLockerGeometryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA11001122334455AA110055 /* DockLockerGeometryTests.swift */; };
+		BD31001122334455BD310066 /* RunningDockLayoutTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD31001122334455BD310055 /* RunningDockLayoutTests.swift */; };
 		7035967427F048F28F80DC6F5E4EE664 /* ShortcutModifierTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 587ED3B636744A92930489AB1D69E926 /* ShortcutModifierTests.swift */; };
 		7A26511F353343F6B5A18820EE9FE37E /* AlternateKeybindTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E661B521AEC4CD1A7DD8C1E422F6E11 /* AlternateKeybindTests.swift */; };
 		B376D66B467C4587915220BC80D3B9CB /* ScriptCommands.swift in Sources */ = {isa = PBXBuildFile; fileRef = F098F8107F464776B5C18294427CAECD /* ScriptCommands.swift */; };
@@ -334,7 +336,9 @@
 		A63C0725F7FB46D3B6850352B3493FA8 /* SettingsSearchTargetModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsSearchTargetModifier.swift; sourceTree = "<group>"; };
 		A669E7D8E433434AB00E292C6BC49062 /* SettingsSearchCatalog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsSearchCatalog.swift; sourceTree = "<group>"; };
 		AA11001122334455AA110011 /* DockLocker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DockLocker.swift; sourceTree = "<group>"; };
+		BD31001122334455BD310011 /* RunningDockController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RunningDockController.swift; sourceTree = "<group>"; };
 		AA11001122334455AA110055 /* DockLockerGeometryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DockLockerGeometryTests.swift; sourceTree = "<group>"; };
+		BD31001122334455BD310055 /* RunningDockLayoutTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RunningDockLayoutTests.swift; sourceTree = "<group>"; };
 		587ED3B636744A92930489AB1D69E926 /* ShortcutModifierTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShortcutModifierTests.swift; sourceTree = "<group>"; };
 		0E661B521AEC4CD1A7DD8C1E422F6E11 /* AlternateKeybindTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlternateKeybindTests.swift; sourceTree = "<group>"; };
 		AA11001122334455AA110100 /* DockDoorTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DockDoorTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -354,7 +358,7 @@
 		BB04405F2C77AD27009F1D33 /* CodableColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CodableColor.swift; sourceTree = "<group>"; };
 		BB0440612C77AE85009F1D33 /* GradientColorPaletteSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GradientColorPaletteSettingsView.swift; sourceTree = "<group>"; };
 		BB0CBE392DD8179200D55437 /* MouseEventModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MouseEventModifier.swift; sourceTree = "<group>"; };
-		BB157B652C0E31CE00997315 /* DockDoor.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DockDoor.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		BB157B652C0E31CE00997315 /* BetterDockDoor.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BetterDockDoor.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		BB157B6C2C0E31CF00997315 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		BB157B6F2C0E31CF00997315 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		BB157B712C0E31CF00997315 /* DockDoor.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = DockDoor.entitlements; sourceTree = "<group>"; };
@@ -672,6 +676,7 @@
 			isa = PBXGroup;
 			children = (
 				AA11001122334455AA110055 /* DockLockerGeometryTests.swift */,
+				BD31001122334455BD310055 /* RunningDockLayoutTests.swift */,
 				D00D4B366E3CF5338182E065 /* NativeTabGroupingTests.swift */,
 				22D3504B979C44D68BB7875D /* TrackpadSwipeDetectorTests.swift */,
 				857A44E5B96B4D7DB218ECD52B9869C4 /* WindowTitlePresentationTests.swift */,
@@ -743,7 +748,7 @@
 		BB157B662C0E31CE00997315 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				BB157B652C0E31CE00997315 /* DockDoor.app */,
+				BB157B652C0E31CE00997315 /* BetterDockDoor.app */,
 				AA11001122334455AA110100 /* DockDoorTests.xctest */,
 			);
 			name = Products;
@@ -804,6 +809,7 @@
 				5EA56DB51EF945F086C8C551 /* SettingsBackupManager.swift */,
 				F098F8107F464776B5C18294427CAECD /* ScriptCommands.swift */,
 				AA11001122334455AA110011 /* DockLocker.swift */,
+				BD31001122334455BD310011 /* RunningDockController.swift */,
 				F875D112D98340CFAB1BC620 /* DockDoorPro.swift */,
 				4763D2E6D3D7410695893D93 /* Links.swift */,
 				22877BDC0B154607B25B3A8B /* WindowActionsMenuController.swift */,
@@ -1095,7 +1101,7 @@
 				BB5C36552F6CEE9E00BE947F /* MediaRemoteAdapter */,
 			);
 			productName = DockDoor;
-			productReference = BB157B652C0E31CE00997315 /* DockDoor.app */;
+			productReference = BB157B652C0E31CE00997315 /* BetterDockDoor.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -1190,6 +1196,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				AA11001122334455AA110066 /* DockLockerGeometryTests.swift in Sources */,
+				BD31001122334455BD310066 /* RunningDockLayoutTests.swift in Sources */,
 				555110B7F7B99C7BD510DBC7 /* NativeTabGroupingTests.swift in Sources */,
 				524C1C716FD24706A7B0D1DE /* TrackpadSwipeDetectorTests.swift in Sources */,
 				B44C0A7CAC3348D191AE0B2A6FA9886C /* WindowTitlePresentationTests.swift in Sources */,
@@ -1397,6 +1404,7 @@
 				BB5349C32EE7C3F5004B1FDD /* WindowPreviewCompact.swift in Sources */,
 				B5247D12ACED4D439B680104EC99DB30 /* WindowlessAppPreview.swift in Sources */,
 				AA11001122334455AA110022 /* DockLocker.swift in Sources */,
+				BD31001122334455BD310022 /* RunningDockController.swift in Sources */,
 				DBFD0B5445DD4F01BD0FBBAB /* DockDoorPro.swift in Sources */,
 				0B939F007507453EBD11BA0D /* Links.swift in Sources */,
 				2256F83C6A79407BB1FA5F33675A3463 /* SettingsTab.swift in Sources */,
@@ -1430,18 +1438,18 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
-				CODE_SIGN_IDENTITY = "Apple Development";
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_STYLE = Manual;
 				DEAD_CODE_STRIPPING = YES;
-				DEVELOPMENT_TEAM = 2Q775S63Q3;
+				DEVELOPMENT_TEAM = "";
 				GENERATE_INFOPLIST_FILE = YES;
 				MACOSX_DEPLOYMENT_TARGET = 14.5;
-				PRODUCT_BUNDLE_IDENTIFIER = com.ethanbills.DockDoorTests;
+				PRODUCT_BUNDLE_IDENTIFIER = io.github.dannyhashim08.BetterDockDoorTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.10;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/DockDoor.app/Contents/MacOS/DockDoor";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/BetterDockDoor.app/Contents/MacOS/BetterDockDoor";
 			};
 			name = Debug;
 		};
@@ -1449,18 +1457,18 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
-				CODE_SIGN_IDENTITY = "Apple Development";
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_STYLE = Manual;
 				DEAD_CODE_STRIPPING = YES;
-				DEVELOPMENT_TEAM = 2Q775S63Q3;
+				DEVELOPMENT_TEAM = "";
 				GENERATE_INFOPLIST_FILE = YES;
 				MACOSX_DEPLOYMENT_TARGET = 14.5;
-				PRODUCT_BUNDLE_IDENTIFIER = com.ethanbills.DockDoorTests;
+				PRODUCT_BUNDLE_IDENTIFIER = io.github.dannyhashim08.BetterDockDoorTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.10;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/DockDoor.app/Contents/MacOS/DockDoor";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/BetterDockDoor.app/Contents/MacOS/BetterDockDoor";
 			};
 			name = Release;
 		};
@@ -1593,18 +1601,18 @@
 		BB157B752C0E31CF00997315 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_APPICON_NAME = BetterDockDoor;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				AUTOMATION_APPLE_EVENTS = YES;
 				CODE_SIGN_ENTITLEMENTS = DockDoor/DockDoorDebug.entitlements;
-				CODE_SIGN_IDENTITY = "Apple Development";
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1.18.3;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"DockDoor/Preview Content\"";
-				DEVELOPMENT_TEAM = 2Q775S63Q3;
+				DEVELOPMENT_TEAM = "";
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				ENABLE_RESOURCE_ACCESS_AUDIO_INPUT = NO;
@@ -1616,7 +1624,7 @@
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = DockDoor/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = DockDoor;
+				INFOPLIST_KEY_CFBundleDisplayName = BetterDockDoor;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
 				INFOPLIST_KEY_LSUIElement = YES;
 				INFOPLIST_KEY_NSAppleEventsUsageDescription = "DockDoor uses AppleEvents to fetch music info from Music and Spotify.";
@@ -1711,8 +1719,9 @@
 					"-Xlinker",
 					_$$s7SwiftUI6_GlassV8monogramACvgZ,
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.ethanbills.DockDoor.debug;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_BUNDLE_IDENTIFIER = io.github.dannyhashim08.BetterDockDoor.debug;
+				PRODUCT_MODULE_NAME = DockDoor;
+				PRODUCT_NAME = BetterDockDoor;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				RUNTIME_EXCEPTION_ALLOW_DYLD_ENVIRONMENT_VARIABLES = NO;
 				RUNTIME_EXCEPTION_ALLOW_JIT = NO;
@@ -1728,18 +1737,18 @@
 		BB157B762C0E31CF00997315 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_APPICON_NAME = BetterDockDoor;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				AUTOMATION_APPLE_EVENTS = YES;
 				CODE_SIGN_ENTITLEMENTS = DockDoor/DockDoor.entitlements;
-				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
-				CODE_SIGN_STYLE = Automatic;
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
+				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1.18.3;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"DockDoor/Preview Content\"";
-				DEVELOPMENT_TEAM = 2Q775S63Q3;
+				DEVELOPMENT_TEAM = "";
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				ENABLE_RESOURCE_ACCESS_AUDIO_INPUT = NO;
@@ -1751,7 +1760,7 @@
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = DockDoor/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = DockDoor;
+				INFOPLIST_KEY_CFBundleDisplayName = BetterDockDoor;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
 				INFOPLIST_KEY_LSUIElement = YES;
 				INFOPLIST_KEY_NSAppleEventsUsageDescription = "DockDoor uses AppleEvents to fetch music info from Music and Spotify.";
@@ -1846,8 +1855,9 @@
 					"-Xlinker",
 					_$$s7SwiftUI6_GlassV8monogramACvgZ,
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.ethanbills.DockDoor;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_BUNDLE_IDENTIFIER = io.github.dannyhashim08.BetterDockDoor;
+				PRODUCT_MODULE_NAME = DockDoor;
+				PRODUCT_NAME = BetterDockDoor;
 				RUNTIME_EXCEPTION_ALLOW_DYLD_ENVIRONMENT_VARIABLES = NO;
 				RUNTIME_EXCEPTION_ALLOW_JIT = NO;
 				RUNTIME_EXCEPTION_ALLOW_UNSIGNED_EXECUTABLE_MEMORY = NO;

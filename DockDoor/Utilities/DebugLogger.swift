@@ -8,7 +8,7 @@ enum DebugLogger {
     private static let queue = DispatchQueue(label: "DebugLogger", qos: .utility)
     private static let logFileURL: URL = {
         let tempDir = FileManager.default.temporaryDirectory
-        return tempDir.appendingPathComponent("DockDoor-Debug.log")
+        return tempDir.appendingPathComponent("BetterDockDoor-Debug.log")
     }()
 
     private static let timestampFormatter: DateFormatter = {

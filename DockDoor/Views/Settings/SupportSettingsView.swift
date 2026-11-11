@@ -11,9 +11,8 @@ struct SupportSettingsView: View {
 
     var body: some View {
         SettingsFormView {
-            DockDoorProBanner()
             permissionsSection
-            updatesSection
+            diagnosticsSection
             acknowledgmentsSection
         }
     }
@@ -42,125 +41,11 @@ struct SupportSettingsView: View {
         }
     }
 
-    // MARK: - Updates Section
-
-    private var updatesSection: some View {
-        SettingsSection("Updates") {
-            HStack(spacing: 12) {
-                SettingsIcon(systemName: "checkmark.seal.fill", color: .green)
-
-                VStack(alignment: .leading, spacing: 2) {
-                    Text("Current Version")
-                        .font(.body)
-                    Text("Version \(updaterState.currentVersion)")
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
-                }
-
-                Spacer()
-
-                updateStatusBadge
-            }
-
-            HStack(spacing: 12) {
-                SettingsIcon(systemName: "arrow.triangle.branch", color: .blue)
-
-                VStack(alignment: .leading, spacing: 2) {
-                    Text("Update Channel")
-                        .font(.body)
-                    Text("Choose between stable releases and beta versions")
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
-                }
-
-                Spacer()
-
-                Picker("", selection: $updaterState.updateChannel) {
-                    ForEach(UpdateChannel.allCases, id: \.self) { channel in
-                        Text(channel.displayName).tag(channel)
-                    }
-                }
-                .labelsHidden()
-                .frame(width: 100)
-            }
-            .settingsSearchTarget("support.updateChannel")
-
-            HStack(spacing: 12) {
-                SettingsIcon(systemName: "arrow.triangle.2.circlepath", color: .orange)
-
-                VStack(alignment: .leading, spacing: 2) {
-                    Text("Check for Updates")
-                        .font(.body)
-                    Text(lastCheckDescription)
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
-                }
-
-                Spacer()
-
-                Button("Check Now") {
-                    updaterState.checkForUpdates()
-                }
-                .buttonStyle(.settings)
-                .disabled(!updaterState.canCheckForUpdates)
-            }
-            .settingsSearchTarget("support.checkForUpdates")
-
-            HStack(spacing: 12) {
-                SettingsIcon(systemName: "clock.arrow.2.circlepath", color: .purple)
-
-                VStack(alignment: .leading, spacing: 2) {
-                    Text("Automatic Updates")
-                        .font(.body)
-                    Text("Automatically check for updates in the background")
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
-                }
-
-                Spacer()
-
-                Toggle("", isOn: Binding(
-                    get: { updaterState.isAutomaticChecksEnabled },
-                    set: { _ in updaterState.toggleAutomaticChecks() }
-                ))
-                .labelsHidden()
-            }
-            .settingsSearchTarget("support.automaticUpdates")
-
+    private var diagnosticsSection: some View {
+        SettingsSection("Diagnostics") {
+            LabeledContent("Current Version", value: updaterState.currentVersion)
             DebugLoggingRow()
                 .settingsSearchTarget("support.debugLogging")
-        }
-    }
-
-    private var lastCheckDescription: String {
-        if let lastCheck = updaterState.lastUpdateCheckDate {
-            let formatted = lastCheck.formatted(date: .abbreviated, time: .shortened)
-            return String(localized: "Last checked: \(formatted)")
-        } else {
-            return String(localized: "No recent checks")
-        }
-    }
-
-    @ViewBuilder
-    private var updateStatusBadge: some View {
-        switch updaterState.updateStatus {
-        case .noUpdates:
-            Label("Up to Date", systemImage: "checkmark.circle.fill")
-                .font(.callout)
-                .foregroundStyle(.green)
-        case .checking:
-            ProgressView()
-                .scaleEffect(0.7)
-                .frame(width: 20, height: 20)
-        case let .available(version, _, _):
-            Label("v\(version) available", systemImage: "arrow.down.circle.fill")
-                .font(.callout)
-                .foregroundStyle(.blue)
-        case let .error(message):
-            Label(message, systemImage: "exclamationmark.triangle.fill")
-                .font(.callout)
-                .foregroundStyle(.red)
-                .lineLimit(1)
         }
     }
 

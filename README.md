@@ -1,3 +1,11 @@
+# BetterDockDoor
+
+A personal macOS fork of DockDoor Free. The first increment adds a floating running-app panel on the primary display. Enable **Show running-app Dock** under **General → Application Basics**. Turn it off in the same place. The panel coexists with Apple’s Dock. The existing DockDoor scheme builds the BetterDockDoor product.
+
+[Build and architecture](docs/betterdockdoor/Architecture.md) · [Requirements matrix](docs/betterdockdoor/Requirements.md) · [Validation and next task](docs/betterdockdoor/Progress.md)
+
+## Upstream DockDoor documentation
+
 <a id="readme-top"></a>
 
 <div align="center">

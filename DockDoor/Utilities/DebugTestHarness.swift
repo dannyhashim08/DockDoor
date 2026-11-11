@@ -11,11 +11,11 @@
             var previewWindowCount: () -> Int
         }
 
-        private static let prefix = "com.ethanbills.DockDoor.debug."
-        private static let diagnosticsLog = "/tmp/DockDoor-Diagnostics.log"
-        private static let memoryLog = "/tmp/DockDoor-Memory.log"
-        private static let settingsLog = "/tmp/DockDoor-Settings.log"
-        private static let refreshLog = "/tmp/DockDoor-FullRefresh.log"
+        private static let prefix = "io.github.dannyhashim08.BetterDockDoor.debug."
+        private static let diagnosticsLog = "/tmp/BetterDockDoor-Diagnostics.log"
+        private static let memoryLog = "/tmp/BetterDockDoor-Memory.log"
+        private static let settingsLog = "/tmp/BetterDockDoor-Settings.log"
+        private static let refreshLog = "/tmp/BetterDockDoor-FullRefresh.log"
 
         private let hooks: Hooks
         private var observers: [NSObjectProtocol] = []

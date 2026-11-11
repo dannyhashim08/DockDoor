@@ -4,6 +4,7 @@ import LaunchAtLogin
 import SwiftUI
 
 struct MainSettingsView: View {
+    @Default(.showRunningDock) private var showRunningDock
     @Default(.showMenuBarIcon) var showMenuBarIcon
     @Default(.showAnimations) var showAnimations
     @Default(.sortMinimizedToEnd) var sortMinimizedToEnd
@@ -11,7 +12,6 @@ struct MainSettingsView: View {
 
     var body: some View {
         SettingsFormView {
-            DockDoorProBanner()
             supportAndContributionsSection
             applicationBasicsSection
             activeAppIndicatorSection
@@ -32,7 +32,11 @@ struct MainSettingsView: View {
 
     private var applicationBasicsSection: some View {
         SettingsSection("Application Basics") {
-            LaunchAtLogin.Toggle(String(localized: "Launch DockDoor at login"))
+            Toggle(String(localized: "Show running-app Dock"), isOn: $showRunningDock)
+                .settingsAnnotation("Show a floating row of running apps on the primary display.")
+                .settingsSearchTarget("general.showRunningDock")
+
+            LaunchAtLogin.Toggle(String(localized: "Launch BetterDockDoor at login"))
                 .settingsSearchTarget("general.launchAtLogin")
 
             Toggle(isOn: $showMenuBarIcon, label: { Text("Show menu bar icon") })
@@ -100,7 +104,7 @@ struct MainSettingsView: View {
             }
             .settingsAnnotation("Every setting goes back to its default. This can't be undone.")
 
-            LabeledContent("Quit DockDoor") {
+            LabeledContent("Quit BetterDockDoor") {
                 Button("Quit") { (NSApplication.shared.delegate as! AppDelegate).quitApp() }
                     .buttonStyle(.settings)
             }

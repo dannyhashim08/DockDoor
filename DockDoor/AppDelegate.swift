@@ -1,7 +1,6 @@
 import ApplicationServices
 import Cocoa
 import Defaults
-import Sparkle
 import SwiftUI
 
 class AppDelegate: NSObject, NSApplicationDelegate {
@@ -15,12 +14,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     private var dockLocker: DockLocker?
     private var statusBarItem: NSStatusItem?
     private let windowActionsMenu = WindowActionsMenuController()
-    private var updaterController: SPUStandardUpdaterController
+    private var runningDock: RunningDockController?
+    private var runningDockTask: Task<Void, Never>?
     @ObservedObject var updaterState: UpdaterState
-
-    var updater: SPUUpdater {
-        updaterController.updater
-    }
 
     #if DEBUG
         private var debugHarness: DebugTestHarness?
@@ -32,11 +28,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     override init() {
         let state = UpdaterState()
         updaterState = state
-
-        let anUpdaterController = SPUStandardUpdaterController(startingUpdater: true, updaterDelegate: state, userDriverDelegate: nil)
-        updaterController = anUpdaterController
-
-        state.updater = anUpdaterController.updater
 
         super.init()
 
@@ -72,6 +63,18 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             removeMenuBar()
         }
 
+        runningDockTask = Task { @MainActor [weak self] in
+            for await _ in Defaults.updates([.showRunningDock], initial: true) {
+                guard !Task.isCancelled, let self else { return }
+                if Defaults[.showRunningDock] {
+                    if runningDock == nil { runningDock = RunningDockController() }
+                } else {
+                    runningDock?.stop()
+                    runningDock = nil
+                }
+            }
+        }
+
         MediaRemoteService.shared.activate()
         ScreenReservations.shared.start()
 
@@ -104,11 +107,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             NSScreen.migrateScreenIdentifier(.pinnedScreenIdentifier)
             if Defaults[.enableDockLocking] {
                 dockLocker = DockLocker()
-            }
-
-            if updater.automaticallyChecksForUpdates {
-                print("AppDelegate: Automatic updates enabled, checking in background.")
-                updater.checkForUpdatesInBackground()
             }
         }
 
@@ -170,6 +168,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     func applicationWillTerminate(_ notification: Notification) {
+        runningDockTask?.cancel()
+        runningDock?.stop()
         wakeRecoveryTask?.cancel()
         WindowUtil.saveWindowOrderFromCache()
         URLCache.shared.removeAllCachedResponses()
@@ -203,13 +203,11 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         actionsItem.submenu = windowActionsMenu.menu
         menu.addItem(actionsItem)
         menu.addItem(NSMenuItem.separator())
-        menu.addItem(NSMenuItem(title: String(localized: "Check for Updates…"), action: #selector(checkForUpdatesWrapper), keyEquivalent: ""))
         menu.addItem(NSMenuItem(title: String(localized: "Support DockDoor"), action: #selector(openDonationPage), keyEquivalent: ""))
-        menu.addItem(NSMenuItem(title: String(localized: "Get DockDoor Pro…"), action: #selector(openProPage), keyEquivalent: ""))
         menu.addItem(NSMenuItem(title: String(localized: "Leave a Review"), action: #selector(openReviewPage), keyEquivalent: ""))
         menu.addItem(NSMenuItem.separator())
-        menu.addItem(NSMenuItem(title: String(localized: "Restart DockDoor"), action: #selector(restartAppWrapper), keyEquivalent: ""))
-        menu.addItem(NSMenuItem(title: String(localized: "Quit DockDoor"), action: #selector(quitAppWrapper), keyEquivalent: "q"))
+        menu.addItem(NSMenuItem(title: String(localized: "Restart BetterDockDoor"), action: #selector(restartAppWrapper), keyEquivalent: ""))
+        menu.addItem(NSMenuItem(title: String(localized: "Quit BetterDockDoor"), action: #selector(quitAppWrapper), keyEquivalent: "q"))
         button.menu = menu
     }
 
@@ -233,16 +231,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         restartApp()
     }
 
-    @objc private func checkForUpdatesWrapper() {
-        updater.checkForUpdates()
-    }
-
     @objc private func openDonationPage() {
         NSWorkspace.shared.open(Links.donate)
-    }
-
-    @objc private func openProPage() {
-        DockDoorPro.open()
     }
 
     @objc private func openReviewPage() {

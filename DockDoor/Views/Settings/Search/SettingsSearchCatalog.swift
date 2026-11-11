@@ -9,6 +9,15 @@ enum SettingsSearchCatalog {
 
     private static let generalItems: [SettingsSearchItem] = [
         SettingsSearchItem(
+            id: "general.showRunningDock",
+            title: String(localized: "Show running-app Dock"),
+            description: String(localized: "Show a floating row of running apps on the primary display."),
+            keywords: ["replacement", "panel", "taskbar", "running"],
+            tab: "General",
+            section: String(localized: "Application Basics"),
+            icon: "dock.rectangle"
+        ),
+        SettingsSearchItem(
             id: "general.leaveReview",
             title: String(localized: "Leave a Review"),
             description: String(localized: "Share your experience on Product Hunt"),
@@ -18,17 +27,8 @@ enum SettingsSearchCatalog {
             icon: "star.bubble.fill"
         ),
         SettingsSearchItem(
-            id: "general.dockDoorPro",
-            title: String(localized: "Get DockDoor Pro"),
-            description: String(localized: "Replace the Dock entirely with the paid app from the same developer"),
-            keywords: ["pro", "premium", "upgrade", "paid", "dock replacement"],
-            tab: "General",
-            section: String(localized: "Support & Contributions"),
-            icon: "sparkles"
-        ),
-        SettingsSearchItem(
             id: "general.launchAtLogin",
-            title: String(localized: "Launch DockDoor at login"),
+            title: String(localized: "Launch BetterDockDoor at login"),
             keywords: ["startup", "boot", "open", "auto"],
             tab: "General",
             section: String(localized: "Application Basics"),
@@ -1926,38 +1926,12 @@ enum SettingsSearchCatalog {
             icon: "record.circle"
         ),
         SettingsSearchItem(
-            id: "support.updateChannel",
-            title: String(localized: "Update Channel"),
-            description: String(localized: "Choose between stable releases and beta versions"),
-            keywords: ["update", "channel", "beta", "stable", "release"],
-            tab: "Support",
-            section: String(localized: "Updates"),
-            icon: "arrow.triangle.branch"
-        ),
-        SettingsSearchItem(
-            id: "support.checkForUpdates",
-            title: String(localized: "Check for Updates"),
-            keywords: ["update", "check", "new version"],
-            tab: "Support",
-            section: String(localized: "Updates"),
-            icon: "arrow.triangle.2.circlepath"
-        ),
-        SettingsSearchItem(
-            id: "support.automaticUpdates",
-            title: String(localized: "Automatic Updates"),
-            description: String(localized: "Automatically check for updates in the background"),
-            keywords: ["update", "automatic", "background", "check"],
-            tab: "Support",
-            section: String(localized: "Updates"),
-            icon: "clock.arrow.2.circlepath"
-        ),
-        SettingsSearchItem(
             id: "support.debugLogging",
             title: String(localized: "Debug Logging"),
             description: String(localized: "Capture performance metrics for troubleshooting"),
             keywords: ["debug", "log", "logging", "performance", "troubleshoot"],
             tab: "Support",
-            section: String(localized: "Updates"),
+            section: String(localized: "Diagnostics"),
             icon: "ant.fill"
         ),
     ]
