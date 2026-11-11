@@ -2,9 +2,13 @@ import AppKit
 import Defaults
 import LaunchAtLogin
 import SwiftUI
+import UniformTypeIdentifiers
 
 struct MainSettingsView: View {
     @Default(.showRunningDock) private var showRunningDock
+    @Default(.runningDockPlacement) private var runningDockPlacement
+    @Default(.runningDockPinnedApps) private var runningDockPinnedApps
+    @Default(.hideNativeDock) private var hideNativeDock
     @Default(.showMenuBarIcon) var showMenuBarIcon
     @Default(.showAnimations) var showAnimations
     @Default(.sortMinimizedToEnd) var sortMinimizedToEnd
@@ -35,6 +39,92 @@ struct MainSettingsView: View {
             Toggle(String(localized: "Show running-app Dock"), isOn: $showRunningDock)
                 .settingsAnnotation("Show a floating row of running apps on the primary display.")
                 .settingsSearchTarget("general.showRunningDock")
+
+            Picker(String(localized: "Replacement Dock edge"), selection: $runningDockPlacement) {
+                ForEach(RunningDockPlacement.allCases) { placement in
+                    Text(placement.localizedName).tag(placement)
+                }
+            }
+            .pickerStyle(.menu)
+            .settingsAnnotation("Position the replacement Dock along the bottom, left, or right edge of the primary display.")
+            .settingsSearchTarget("general.runningDockPlacement")
+
+            Toggle(String(localized: "Hide Apple's Dock while replacement Dock is active"), isOn: $hideNativeDock)
+                .settingsAnnotation("Reversibly auto-hides Apple's Dock after recording your original Dock preferences to a recovery journal.")
+                .settingsSearchTarget("general.hideNativeDock")
+
+            LabeledContent(String(localized: "Restore Apple's Dock")) {
+                Button(String(localized: "Restore Apple's Dock")) {
+                    (NSApplication.shared.delegate as? AppDelegate)?.restoreNativeDockEmergency()
+                }
+                .buttonStyle(.settings)
+            }
+            .settingsAnnotation("Immediately restores Apple's Dock preferences from the recovery journal and disables native Dock hiding.")
+            .settingsSearchTarget("general.restoreNativeDock")
+
+            LabeledContent(String(localized: "Pinned Dock applications")) {
+                HStack(spacing: 8) {
+                    Button(String(localized: "Pin Application…")) {
+                        promptToPinApplication()
+                    }
+                    .buttonStyle(.settings)
+
+                    if !runningDockPinnedApps.isEmpty {
+                        Button(String(localized: "Clear Pins"), role: .destructive) {
+                            runningDockPinnedApps.removeAll()
+                        }
+                        .buttonStyle(.settings)
+                    }
+                }
+            }
+            .settingsAnnotation("Pinned applications stay in your chosen order across launches, even when closed or if their app bundle is missing.")
+            .settingsSearchTarget("general.pinnedDockApps")
+
+            ForEach(runningDockPinnedApps) { pin in
+                HStack(spacing: 8) {
+                    Image(systemName: "pin.fill")
+                        .foregroundStyle(.secondary)
+                        .frame(width: 16)
+                    Text(pin.displayName)
+                        .lineLimit(1)
+                        .truncationMode(.middle)
+                    if WorkspaceDockBundleResolver().resolveBundle(for: pin) == nil {
+                        Text(String(localized: "Missing"))
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                    }
+                    Spacer()
+                    Button {
+                        runningDockPinnedApps = RunningDockPinStore.movePin(id: pin.id, by: -1, in: runningDockPinnedApps)
+                    } label: {
+                        Image(systemName: "chevron.up")
+                            .foregroundStyle(.secondary)
+                    }
+                    .buttonStyle(.plain)
+                    .help(String(localized: "Move Up"))
+                    .accessibilityLabel(String(localized: "Move \(pin.displayName) up"))
+
+                    Button {
+                        runningDockPinnedApps = RunningDockPinStore.movePin(id: pin.id, by: 1, in: runningDockPinnedApps)
+                    } label: {
+                        Image(systemName: "chevron.down")
+                            .foregroundStyle(.secondary)
+                    }
+                    .buttonStyle(.plain)
+                    .help(String(localized: "Move Down"))
+                    .accessibilityLabel(String(localized: "Move \(pin.displayName) down"))
+
+                    Button {
+                        runningDockPinnedApps = RunningDockPinStore.unpin(id: pin.id, from: runningDockPinnedApps)
+                    } label: {
+                        Image(systemName: "minus.circle.fill")
+                            .foregroundStyle(.secondary)
+                    }
+                    .buttonStyle(.plain)
+                    .help(String(localized: "Unpin"))
+                    .accessibilityLabel(String(localized: "Unpin \(pin.displayName)"))
+                }
+            }
 
             LaunchAtLogin.Toggle(String(localized: "Launch BetterDockDoor at login"))
                 .settingsSearchTarget("general.launchAtLogin")
@@ -113,11 +203,43 @@ struct MainSettingsView: View {
 
     // MARK: - Helper Functions
 
+    private func promptToPinApplication() {
+        let panel = NSOpenPanel()
+        panel.allowedContentTypes = [.application]
+        panel.allowsMultipleSelection = true
+        panel.canChooseDirectories = false
+        panel.directoryURL = URL(fileURLWithPath: "/Applications", isDirectory: true)
+        panel.title = String(localized: "Pin Application to Dock")
+
+        guard panel.runModal() == .OK else { return }
+        var updated = runningDockPinnedApps
+        for url in panel.urls {
+            let bundle = Bundle(url: url)
+            let bundleID = bundle?.bundleIdentifier ?? ""
+            let displayName = (bundle?.object(forInfoDictionaryKey: "CFBundleDisplayName") as? String)
+                ?? (bundle?.object(forInfoDictionaryKey: "CFBundleName") as? String)
+                ?? url.deletingPathExtension().lastPathComponent
+            let candidate = RunningDockPin(
+                bundleIdentifier: bundleID,
+                displayName: displayName,
+                bundlePath: url.path
+            )
+            updated = RunningDockPinStore.pin(candidate, in: updated)
+        }
+        runningDockPinnedApps = updated
+    }
+
     private func showResetConfirmation() {
         MessageUtil.showAlert(title: String(localized: "Reset to Defaults"), message: String(localized: "Are you sure you want to reset all settings to their default values?"), actions: [.ok, .cancel]) { action in
             if action == .ok {
+                (NSApplication.shared.delegate as? AppDelegate)?.restoreNativeDockEmergency()
                 Defaults.removeAll()
                 Defaults[.launched] = true
+
+                Defaults[.showRunningDock] = Defaults.Keys.showRunningDock.defaultValue
+                Defaults[.runningDockPlacement] = Defaults.Keys.runningDockPlacement.defaultValue
+                Defaults[.runningDockPinnedApps] = Defaults.Keys.runningDockPinnedApps.defaultValue
+                Defaults[.hideNativeDock] = Defaults.Keys.hideNativeDock.defaultValue
 
                 Defaults[.hoverWindowOpenDelay] = Defaults.Keys.hoverWindowOpenDelay.defaultValue
                 Defaults[.fadeOutDuration] = Defaults.Keys.fadeOutDuration.defaultValue

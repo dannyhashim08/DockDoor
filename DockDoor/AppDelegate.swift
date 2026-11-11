@@ -170,6 +170,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     func applicationWillTerminate(_ notification: Notification) {
         runningDockTask?.cancel()
         runningDock?.stop()
+        _ = try? nativeDockRecovery.restore()
         wakeRecoveryTask?.cancel()
         WindowUtil.saveWindowOrderFromCache()
         URLCache.shared.removeAllCachedResponses()
@@ -202,6 +203,13 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         let actionsItem = NSMenuItem(title: windowActionsMenu.menu.title, action: nil, keyEquivalent: "")
         actionsItem.submenu = windowActionsMenu.menu
         menu.addItem(actionsItem)
+        let restoreDockItem = NSMenuItem(
+            title: String(localized: "Restore Apple's Dock"),
+            action: #selector(restoreNativeDockEmergencyWrapper),
+            keyEquivalent: "d"
+        )
+        restoreDockItem.keyEquivalentModifierMask = [.command, .option, .shift]
+        menu.addItem(restoreDockItem)
         menu.addItem(NSMenuItem.separator())
         menu.addItem(NSMenuItem(title: String(localized: "Support DockDoor"), action: #selector(openDonationPage), keyEquivalent: ""))
         menu.addItem(NSMenuItem(title: String(localized: "Leave a Review"), action: #selector(openReviewPage), keyEquivalent: ""))
@@ -229,6 +237,15 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
     @objc private func restartAppWrapper() {
         restartApp()
+    }
+
+    @objc private func restoreNativeDockEmergencyWrapper() {
+        restoreNativeDockEmergency()
+    }
+
+    func restoreNativeDockEmergency() {
+        Defaults[.hideNativeDock] = false
+        nativeDockRecovery.emergencyRestore()
     }
 
     @objc private func openDonationPage() {

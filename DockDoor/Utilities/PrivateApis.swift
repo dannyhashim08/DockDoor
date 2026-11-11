@@ -28,6 +28,10 @@ func CoreDockGetOrientationAndPinning(_ outOrientation: UnsafeMutablePointer<Int
 @_silgen_name("CoreDockGetAutoHideEnabled")
 func CoreDockGetAutoHideEnabled() -> Bool
 
+// Updates the auto-hide state of the Dock without terminating Dock.app
+@_silgen_name("CoreDockSetAutoHideEnabled")
+func CoreDockSetAutoHideEnabled(_ flag: Bool)
+
 // Retrieves the current magnification state of the Dock
 @_silgen_name("CoreDockIsMagnificationEnabled")
 func CoreDockIsMagnificationEnabled() -> Bool

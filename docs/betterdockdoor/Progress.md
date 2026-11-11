@@ -21,6 +21,36 @@
 | Live Dock panel | Turning the switch on and closing settings exposed ten named running-app buttons in the accessibility tree. Clicking Xcode moved selection from Brave Browser to Xcode. |
 | Hot-plug, fullscreen, Mission Control, permission revocation, sleep/wake and idle CPU | Pending on physical hardware. No performance measurements recorded. |
 
-**Limitations.** This first panel is restricted to running apps on the primary display. Pinning, other edges, native-Dock hiding, recovery and independent replacement-panel previews are pending. The inherited native-Dock hover path remains active. The panel has no global shortcut or event tap of its own.
+## Milestone 2 — Durable application pins, screen edges, and native-Dock recovery
 
-**Exact next task.** Implement durable application pins in user-defined order. Validate pin/unpin, inactive pinned apps, relaunch and missing bundles, then add left/right placement and the native-Dock recovery transaction. Remaining desktop checks include hide/unhide, overflow, adding/removing running apps and physical display transitions.
+**Implemented behavior.**
+- **Durable application pins (`RunningDockPin`, `RunningDockPinStore`, `Defaults.Keys.runningDockPinnedApps`).** Pinned applications persist in user-defined order and round-trip through `Defaults` and `SettingsBackupManager`. `RunningDockPinStore.buildItems` merges pinned apps with live `NSWorkspace` applications:
+  - Running pinned apps stay in their user-defined pinned slot, display running/active capsules, and refresh cached bundle metadata.
+  - Inactive pinned apps resolve their bundle on disk (`WorkspaceDockBundleResolver`) and launch via `NSWorkspace.shared.openApplication` when clicked or chosen from the context menu.
+  - Pinned apps whose bundle is missing or on an unmounted volume remain in their pinned slot (`isMissingBundle = true`, placeholder icon, `"Application not found"` accessibility value/tooltip, beep on click) and are never silently dropped on relaunch.
+  - Unpinned running apps follow after a section divider in localized standard name order.
+  - Users can pin, unpin, and reorder pinned apps via each Dock item's context menu or in **Settings → General → Application Basics**.
+- **Left, right, and bottom placement (`RunningDockPlacement`, `Defaults.Keys.runningDockPlacement`).** `RunningDockLayout.frame(in:appCount:placement:)` positions the panel along the `.bottom` (horizontal), `.left` (vertical), or `.right` (vertical) edge of `visibleFrame` and reports the active edge thickness to `ScreenReservations.shared` (`io.github.dannyhashim08.BetterDockDoor.runningDock`) while visible. `RunningDockView` adapts its scroll axis, divider orientation, and active/running indicator placement to the selected edge.
+- **Journaled native-Dock recovery transaction (`NativeDockRecoveryCoordinator`, `NativeDockRecoveryJournal`, `Defaults.Keys.hideNativeDock`).**
+  - Before modifying `com.apple.dock` (`autohide` and `autohide-delay`), `NativeDockRecoveryCoordinator.engage()` records each owned key's prior presence (`wasPresent`) and typed value (`NativeDockPreferenceValue`) atomically to `native-dock-recovery-journal.json` in `Application Support`.
+  - If a journal already exists on disk from a prior crash or forced exit, `engage()` preserves the original pre-mutation snapshot rather than overwriting it with mutated values.
+  - `restore()` restores only the owned keys recorded in the journal (removing keys that were previously absent), synchronizes `com.apple.dock`, updates live Dock auto-hide via `CoreDockSetAutoHideEnabled` without terminating `com.apple.Dock.agent` (preserving Mission Control, Spaces, and Exposé), and deletes the journal.
+  - `AppDelegate` reconciles the journal on launch, on setting changes, and in `applicationWillTerminate`.
+  - Emergency recovery (`Restore Apple's Dock`) is exposed in the status bar menu (`Cmd+Option+Shift+D`), in **Settings → General → Application Basics**, and during **Reset All Settings to Defaults**.
+
+**Validation performed and actual observed results.**
+
+| Check | Actual result |
+|---|---|
+| Settings style & search catalog parity (`SettingsStyleDriftTests` rules) | Verified via static test runner across all 11 converted settings panes and 218 `SettingsSearchCatalog` IDs: 0 orphaned catalog IDs, 0 unindexed `.settingsSearchTarget` calls, all buttons styled, no modifier chains on control flow. |
+| Unit test suite additions (`RunningDockLayoutTests.swift`) | Added 7 new XCTest methods (9 total in `RunningDockLayoutTests`): `testLeftPlacementCentersVerticallyOnOffsetDisplay`, `testRightPlacementAnchorsToRightEdgeAndClampsVerticalOverflow`, `testPinUnpinAndUserDefinedOrderPreserved`, `testBuildItemsHandlesInactiveRunningAndMissingBundlesInPinnedOrder`, `testPinsPersistAcrossJSONAndBackupRoundTrip`, `testNativeDockRecoveryRestoresPriorValuesAndKeyAbsence`, and `testCrashRecoveryReconcilesJournalOnRelaunchWithoutOverwritingOriginalSnapshot`. |
+| macOS Xcode build, test execution, and live desktop interaction for Milestone 2 | Not yet executed in this Linux agent environment (`xcodebuild` requires macOS 27.2 / Xcode 27.2). Must be run and verified on the development Mac before marking Milestone 2 runtime-verified. |
+
+**Known issues and OS limitations.**
+- Because macOS keeps `com.apple.Dock.agent` alive to own Mission Control, Spaces, and the desktop wallpaper, hiding Apple’s Dock relies on `autohide = true` and a large `autohide-delay` (`1000.0` seconds) rather than killing or unloading the system Dock agent. Apple’s Dock can still appear inside Mission Control or if another process explicitly overrides `com.apple.dock` preferences.
+- `RunningDockController` currently renders on the primary screen (`NSScreen.screens.first`); per-display assignment and multi-monitor panel coordination remain scheduled for the Profiles & Displays phase.
+
+**Exact next task.**
+1. On the macOS 27.2.1 development machine, run `xcodebuild -project DockDoor.xcodeproj -scheme DockDoor -destination 'platform=macOS' test` to confirm all inherited tests plus the 9 `RunningDockLayoutTests` pass in Xcode 27.2.
+2. Perform live desktop verification of Milestone 2: pin/unpin apps via context menu and Settings, launch an inactive pinned app, test a missing bundle entry, switch between bottom/left/right edges, toggle **Hide Apple's Dock while replacement Dock is active**, verify **Restore Apple's Dock** (`Cmd+Option+Shift+D`), and test forced termination (`kill -9`) recovery in a disposable macOS account.
+3. Proceed to **Phase 3 (Materials & Motion)** and **Phase 4 (Window Management & Switchers)**: wire `RunningDockView` hover and click events into `WindowUtil` and `SharedPreviewWindowCoordinator` so hovering a replacement-Dock item presents window previews, and share appearance/material tokens with accessibility fallbacks.

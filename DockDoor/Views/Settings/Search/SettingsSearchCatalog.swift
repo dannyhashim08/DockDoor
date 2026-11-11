@@ -18,6 +18,42 @@ enum SettingsSearchCatalog {
             icon: "dock.rectangle"
         ),
         SettingsSearchItem(
+            id: "general.runningDockPlacement",
+            title: String(localized: "Replacement Dock edge"),
+            description: String(localized: "Position the replacement Dock along the bottom, left, or right edge of the primary display."),
+            keywords: ["dock", "edge", "left", "right", "bottom", "position", "placement"],
+            tab: "General",
+            section: String(localized: "Application Basics"),
+            icon: "rectangle.bottomhalf.inset.filled"
+        ),
+        SettingsSearchItem(
+            id: "general.hideNativeDock",
+            title: String(localized: "Hide Apple's Dock while replacement Dock is active"),
+            description: String(localized: "Reversibly auto-hides Apple's Dock after recording your original Dock preferences to a recovery journal."),
+            keywords: ["native", "apple", "dock", "hide", "autohide", "replacement", "recovery"],
+            tab: "General",
+            section: String(localized: "Application Basics"),
+            icon: "eye.slash"
+        ),
+        SettingsSearchItem(
+            id: "general.restoreNativeDock",
+            title: String(localized: "Restore Apple's Dock"),
+            description: String(localized: "Immediately restores Apple's Dock preferences from the recovery journal and disables native Dock hiding."),
+            keywords: ["restore", "emergency", "recover", "apple", "native", "dock"],
+            tab: "General",
+            section: String(localized: "Application Basics"),
+            icon: "arrow.uturn.backward.circle"
+        ),
+        SettingsSearchItem(
+            id: "general.pinnedDockApps",
+            title: String(localized: "Pinned Dock applications"),
+            description: String(localized: "Pinned applications stay in your chosen order across launches, even when closed or if their app bundle is missing."),
+            keywords: ["pin", "pinned", "unpin", "order", "applications", "dock"],
+            tab: "General",
+            section: String(localized: "Application Basics"),
+            icon: "pin"
+        ),
+        SettingsSearchItem(
             id: "general.leaveReview",
             title: String(localized: "Leave a Review"),
             description: String(localized: "Share your experience on Product Hunt"),
